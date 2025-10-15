@@ -1,55 +1,75 @@
-import streamlit as st
-import deeplabcut
 import os
-import time
-from pathlib import Path
+import streamlit as st
+import pandas as pd
+import numpy as np
+import subprocess
 
-# --- Configuration ---
-PROJECT_PATH = "/data/wythe_lab/DLC_project/config.yaml"  # adjust to your project
-UPLOAD_DIR = "/data/wythe_lab/uploads"
+# --- Server directories ---
+VIDEO_DIR = "/home/jhs8cue/wythe_lab/videos"
+os.makedirs(VIDEO_DIR, exist_ok=True)
 
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# Path to your batch script
+BATCH_SCRIPT = "/home/jhs8cue/wythe_lab/run_video_analysis_gpu.sh"
 
-st.title("Wythe Lab DeepLabCut Video Analyzer 🎥🐁")
-st.write("Upload a video file to analyze with DeepLabCut.")
+# --- Helper functions ---
+def extract_coordinates(csv_file_path):
+    df = pd.read_csv(csv_file_path, header=[0,1,2])
+    x_coords = df.xs("x", axis=1, level=2)
+    y_coords = df.xs("y", axis=1, level=2)
+    sorted_columns = sorted(x_coords.columns, key=lambda col: col[1])
+    x_coords = x_coords[sorted_columns]
+    y_coords = y_coords[sorted_columns]
+    body_parts = [col[1] for col in sorted_columns]
+    return x_coords, y_coords, body_parts
 
-uploaded_video = st.file_uploader("Upload your video", type=["mp4", "avi", "mov"])
+def calculate_total_distance_traveled(x_coords, y_coords, body_parts):
+    total_distances = {}
+    for i, body_part in enumerate(body_parts):
+        x = pd.Series(x_coords.iloc[:, i]).interpolate(limit_direction="both").values
+        y = pd.Series(y_coords.iloc[:, i]).interpolate(limit_direction="both").values
+        deltas = np.sqrt(np.diff(x)**2 + np.diff(y)**2)
+        total_distances[body_part] = np.nansum(deltas)
+    return total_distances
 
-if uploaded_video is not None:
-    # Save uploaded file
-    video_path = Path(UPLOAD_DIR) / uploaded_video.name
+def run_batch_script(video_path):
+    """Run your existing GPU batch script on the uploaded video."""
+    cmd = [BATCH_SCRIPT, video_path]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    return result
+
+# --- Streamlit app ---
+st.title("Foot Fault Analysis via Batch Script")
+
+uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
+
+if uploaded_file is not None:
+    video_path = os.path.join(VIDEO_DIR, uploaded_file.name)
     with open(video_path, "wb") as f:
-        f.write(uploaded_video.read())
+        f.write(uploaded_file.getbuffer())
+    st.success(f"Saved video to {video_path}")
 
-    st.success(f"Video uploaded to server: {video_path}")
+    st.info("Running batch analysis on GPU...")
+    result = run_batch_script(video_path)
 
-    if st.button("Run DeepLabCut Analysis"):
-        with st.spinner("Analyzing video... This may take a few minutes ⏳"):
-            try:
-                # Step 1: Analyze video
-                deeplabcut.analyze_videos(PROJECT_PATH, [str(video_path)], save_as_csv=True)
+    if result.returncode != 0:
+        st.error(f"Batch script failed:\n{result.stderr}")
+    else:
+        st.success("Batch script completed successfully!")
 
-                # Step 2: Create labeled video
-                deeplabcut.create_labeled_video(PROJECT_PATH, [str(video_path)], draw_skeleton=True)
+        # Assume your batch script generates a CSV in the same folder with a predictable name
+        csv_name = os.path.splitext(uploaded_file.name)[0] + "DeepCut_resnet50_projected.csv"
+        csv_path = os.path.join(VIDEO_DIR, csv_name)
 
-                st.success("Analysis complete!")
+        if not os.path.exists(csv_path):
+            st.error(f"CSV file not found: {csv_path}")
+        else:
+            x_coords, y_coords, body_parts = extract_coordinates(csv_path)
+            total_distances = calculate_total_distance_traveled(x_coords, y_coords, body_parts)
 
-                # Step 3: Offer downloads
-                video_dir = video_path.parent
-                base_name = video_path.stem
-                h5_file = list(video_dir.glob(f"{base_name}*.h5"))
-                csv_file = list(video_dir.glob(f"{base_name}*filtered.csv"))
-                labeled_video = list(video_dir.glob(f"{base_name}*labeled.mp4"))
+            st.subheader("Total distance traveled per body part (pixels):")
+            for bp, dist in total_distances.items():
+                st.write(f"**{bp}:** {dist:.2f}")
 
-                if csv_file:
-                    with open(csv_file[0], "rb") as f:
-                        st.download_button("Download CSV", data=f, file_name=csv_file[0].name)
-                if h5_file:
-                    with open(h5_file[0], "rb") as f:
-                        st.download_button("Download H5 file", data=f, file_name=h5_file[0].name)
-                if labeled_video:
-                    with open(labeled_video[0], "rb") as f:
-                        st.download_button("Download Annotated Video", data=f, file_name=labeled_video[0].name)
-
-            except Exception as e:
-                st.error(f"Error during analysis: {e}")
+            # Optionally allow downloads
+            st.download_button("Download CSV", data=open(csv_path, "rb"), file_name=csv_name)
+            st.download_button("Download video", data=open(video_path, "rb"), file_name=uploaded_file.name)
