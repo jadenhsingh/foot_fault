@@ -65,12 +65,12 @@ if uploaded_file:
     st.success(f"Uploaded video saved to: {video_path}")
 
     # Submit batch job to SLURM
-    st.info("Submitting video for GPU batch analysis...")
+    st.info("Submitting video for DeepLabCut video analysis...")
     job_id = run_batch_script(video_path)
     st.success(f"Submitted batch job ID: {job_id}")
 
     # Polling for completion
-    with st.spinner("Running analysis on GPU (this may take a while)..."):
+    with st.spinner("Running video analysis on GPU (this may take a while)..."):
         while not check_job_done(job_id):
             time.sleep(30)
 
