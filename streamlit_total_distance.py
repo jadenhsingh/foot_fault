@@ -6,7 +6,7 @@ from calculate_total_distance_traveled import extract_coordinates, calculate_tot
 
 # --- Title and description ---
 st.title("Foot Fault Distance Analyzer 🐁")
-st.write("Upload your DeepLabCut CSV to calculate total distance traveled per paw.")
+st.write("Upload your DeepLabCut CSV to calculate total distance traveled per body part.")
 
 # --- File upload ---
 uploaded_file = st.file_uploader("Upload a corrected CSV file", type=["csv"])
