@@ -9,7 +9,7 @@ VIDEO_DIR = "/home/jhs8cue/wythe_lab/videos"
 os.makedirs(VIDEO_DIR, exist_ok=True)
 
 # Path to your batch script
-BATCH_SCRIPT = "/home/jhs8cue/wythe_lab/run_video_analysis_gpu.sh"
+BATCH_SCRIPT = "/home/jhs8cue/run_video_analysis_gpu.sh"
 
 # --- Helper functions ---
 def extract_coordinates(csv_file_path):
