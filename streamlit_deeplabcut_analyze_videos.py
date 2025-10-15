@@ -92,9 +92,13 @@ if uploaded_file:
             x_coords, y_coords, body_parts = extract_coordinates(csv_path)
             total_distances = calculate_total_distance_traveled(x_coords, y_coords, body_parts)
 
-            st.subheader("Total Distance Traveled (pixels)")
-            for bp, dist in total_distances.items():
-                st.write(f"**{bp}:** {dist:.2f}")
+            # Create a nicely formatted table
+            distances_df = pd.DataFrame({
+                "Body Part": list(total_distances.keys()),
+                "Total Distance (pixels)": [f"{v:.2f}" for v in total_distances.values()]
+            })
+            st.subheader("Total Distance Traveled")
+            st.table(distances_df)
 
         # Provide download buttons for all generated files
         st.subheader("Download Generated Files")
