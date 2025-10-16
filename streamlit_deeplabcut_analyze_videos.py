@@ -6,6 +6,7 @@ import time
 import subprocess
 import glob
 import shutil
+import zipfile
 
 # --- Server directories ---
 VIDEO_DIR = "/home/jhs8cue/wythe_lab/videos"
@@ -44,7 +45,7 @@ def run_batch_script(video_path):
 
     # Example output: "Submitted batch job 123456"
     stdout = result.stdout.strip()
-    job_id = stdout.split()[-1]  # get the last word
+    job_id = stdout.split()[-1]
     return job_id
 
 def check_job_done(job_id):
@@ -57,6 +58,12 @@ st.title("Foot Fault Distance Analyzer 🐁")
 
 uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
 
+# Initialize session state for job tracking
+if "job_id" not in st.session_state:
+    st.session_state.job_id = None
+if "video_path" not in st.session_state:
+    st.session_state.video_path = None
+
 if uploaded_file:
     # Save uploaded video to server
     video_path = os.path.join(VIDEO_DIR, uploaded_file.name)
@@ -64,21 +71,42 @@ if uploaded_file:
         f.write(uploaded_file.getbuffer())
     st.success(f"Uploaded video saved to: {video_path}")
 
-    # Submit batch job to SLURM
-    st.info("Submitting video for DeepLabCut video analysis...")
-    job_id = run_batch_script(video_path)
-    st.success(f"Submitted batch job ID: {job_id}")
+    # Submit batch job if not already submitted
+    if not st.session_state.job_id:
+        st.info("Submitting video for DeepLabCut video analysis...")
+        job_id = run_batch_script(video_path)
+        st.session_state.job_id = job_id
+        st.session_state.video_path = video_path
+        st.success(f"Submitted batch job ID: {job_id}")
 
-    # Polling for completion
+if st.session_state.job_id:
+    job_id = st.session_state.job_id
+    st.info(f"Monitoring job ID: {job_id}")
+
     with st.spinner("Running video analysis on GPU (this may take a while)..."):
         while not check_job_done(job_id):
             time.sleep(30)
 
     st.success("🎉 Job completed! Processing results...")
 
-    # Find all generated files for this video
+    # Reset session state
+    st.session_state.job_id = None
+    st.session_state.video_path = None
+
     base_name = os.path.splitext(uploaded_file.name)[0]
     generated_files = glob.glob(os.path.join(VIDEO_DIR, f"{base_name}*"))
+
+    # Include 'plot-poses' directory if it exists
+    plot_dir = os.path.join(VIDEO_DIR, "plot-poses")
+    if os.path.isdir(plot_dir):
+        zip_path = os.path.join(VIDEO_DIR, "plot-poses.zip")
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(plot_dir):
+                for file in files:
+                    abs_path = os.path.join(root, file)
+                    rel_path = os.path.relpath(abs_path, VIDEO_DIR)
+                    zipf.write(abs_path, rel_path)
+        generated_files.append(zip_path)
 
     if not generated_files:
         st.error("No output files found after analysis.")
@@ -92,7 +120,6 @@ if uploaded_file:
             x_coords, y_coords, body_parts = extract_coordinates(csv_path)
             total_distances = calculate_total_distance_traveled(x_coords, y_coords, body_parts)
 
-            # Create a nicely formatted table
             distances_df = pd.DataFrame({
                 "Body Part": list(total_distances.keys()),
                 "Total Distance (pixels)": [f"{v:.2f}" for v in total_distances.values()]
@@ -100,20 +127,28 @@ if uploaded_file:
             st.subheader("Total Distance Traveled")
             st.table(distances_df)
 
-        # Provide download buttons for all generated files
+        # Provide download buttons for all generated files (including ZIP)
         st.subheader("Download Generated Files")
         for file_path in generated_files:
-            st.download_button(
-                label=f"⬇ Download {os.path.basename(file_path)}",
-                data=open(file_path, "rb"),
-                file_name=os.path.basename(file_path)
-            )
+            if os.path.isfile(file_path):
+                st.download_button(
+                    label=f"⬇ Download {os.path.basename(file_path)}",
+                    data=open(file_path, "rb"),
+                    file_name=os.path.basename(file_path)
+                )
 
-        # Delete all generated files to save space
+        # Delete files and directories
         for file_path in generated_files:
             try:
                 os.remove(file_path)
             except Exception as e:
-                st.warning(f"Could not delete {file_path}: {e}")
+                st.warning(f"Could not delete file {file_path}: {e}")
 
-    st.success("Processing complete. All files have been cleaned up from the server.")
+        # Delete the 'plot-poses' directory if it exists
+        if os.path.isdir(plot_dir):
+            try:
+                shutil.rmtree(plot_dir)
+            except Exception as e:
+                st.warning(f"Could not delete directory {plot_dir}: {e}")
+
+    st.success("Processing complete. All files and directories have been cleaned up from the server.")
