@@ -87,7 +87,7 @@ if st.session_state.job_id:
         while not check_job_done(job_id):
             time.sleep(30)
 
-    st.success("🎉 Job completed! Processing results...")
+    st.success("Job completed! Processing results...")
 
     # Reset session state
     st.session_state.job_id = None
@@ -128,7 +128,7 @@ if st.session_state.job_id:
             st.table(distances_df)
 
         # Provide download buttons for all generated files (including ZIP)
-        st.subheader("Download Generated Files")
+        st.subheader("Download")
         for file_path in generated_files:
             if os.path.isfile(file_path):
                 st.download_button(
@@ -151,4 +151,4 @@ if st.session_state.job_id:
             except Exception as e:
                 st.warning(f"Could not delete directory {plot_dir}: {e}")
 
-    st.success("Processing complete. All files and directories have been cleaned up from the server.")
+    st.success("Processing complete!")
