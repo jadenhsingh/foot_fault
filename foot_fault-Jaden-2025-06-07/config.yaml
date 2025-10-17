@@ -1,0 +1,239 @@
+# Project definitions (do not edit)
+Task: foot_fault
+scorer: Jaden
+date: Jun7
+multianimalproject: false
+identity:
+
+
+# Project path (change when moving around)
+project_path: /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07
+
+
+# Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
+engine: pytorch
+
+
+# Annotation data set configuration (and individual video cropping parameters)
+video_sets:
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0049.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0125_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0041.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0124_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0050.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0038.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0103_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0126_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0115_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0139_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0097_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0113_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0127_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0087_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0129_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0119_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0044.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0036.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0042.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0040.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0048.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0118_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0088_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0131_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0089_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0037.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0110_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0135_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0130_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0106_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0046.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0114_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0099_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0101_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0043.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0108_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0109_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0134_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0140_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0098_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0141_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0047.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0128_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0111_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0132_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0121_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0045.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0039.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0116_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0120_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+  /sfs/gpfs/tardis/home/jhs8cue/foot_fault-Jaden-2025-06-07/videos/GOPR0086_clipped.mp4:
+    crop: 0, 1920, 0, 1080
+bodyparts:
+- front_left_paw
+- front_right_paw
+- back_left_paw
+- back_right_paw
+- nose
+- neck
+- tail_base
+- tail_tip
+- centroid
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+start: 0
+stop: 1
+numframes2pick: 20
+
+
+# Plotting configuration
+skeleton:
+- - bodypart1
+  - bodypart2
+- - objectA
+  - bodypart3
+skeleton_color: black
+pcutoff: 0.6
+dotsize: 12
+alphavalue: 0.7
+colormap: rainbow
+
+
+# Training,Evaluation and Analysis configuration
+TrainingFraction:
+- 0.95
+iteration: 0
+default_net_type: resnet_50
+default_augmenter: default
+snapshotindex: -1
+detector_snapshotindex: -1
+batch_size: 8
+
+
+# Cropping Parameters (for analysis and outlier frame detection)
+cropping: false
+#if cropping is true for analysis, then set the values here:
+x1: 0
+x2: 640
+y1: 277
+y2: 624
+
+
+# Refinement configuration (parameters from annotation dataset configuration also relevant in this stage)
+corner2move2:
+- 50
+- 50
+move2corner: true
+
+
+# Conversion tables to fine-tune SuperAnimal weights
+SuperAnimalConversionTables:

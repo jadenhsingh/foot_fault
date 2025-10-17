@@ -1,0 +1,81 @@
+#!/bin/bash
+
+
+
+#Submit this script with: sbatch myjob.slurm
+
+
+
+#SBATCH --time=0-10:00:00   # Adjusted job time limit
+
+#SBATCH --nodes=1   
+
+#SBATCH --ntasks=1   # Single task
+
+#SBATCH --cpus-per-task=16   # Number of CPU cores
+
+#SBATCH --gres=gpu:a100:1   # Request 1 GPU
+
+#SBATCH --partition=gpu   # GPU partition
+
+#SBATCH -J "run_video_analysis"   # Job name
+
+#SBATCH --mail-user=jadenhsingh@gmail.com   # Email address
+
+#SBATCH --mail-type=BEGIN,END,FAIL
+
+#SBATCH --account=wythe_lab   # Allocation name
+
+
+module purge
+
+module load miniforge
+
+export PATH=$PATH:/home/$USER/.local/bin
+
+source activate deeplabcut-env
+
+python -c "
+import deeplabcut
+import os
+
+config_path = '/home/jhs8cue/foot_fault-Jaden-2025-06-07/config.yaml'
+videos_path = '/home/jhs8cue/wythe_lab/videos'
+
+# Get only .mp4 files that do NOT end with '_labeled.mp4'
+videos = [
+    os.path.join(videos_path, f)
+    for f in os.listdir(videos_path)
+    if f.endswith('.mp4') and not f.endswith('_labeled.mp4')
+]
+deeplabcut.analyze_videos(
+    config_path,
+    videos,
+    videotype='mp4',
+    save_as_csv=True,
+    shuffle=2
+)
+deeplabcut.filterpredictions(
+    config_path,
+    videos,
+    videotype='mp4',
+    filtertype='median',
+    shuffle=2
+)
+deeplabcut.create_labeled_video(
+    config_path,
+    videos,
+    videotype='mp4',
+    draw_skeleton=True,
+    shuffle=2,
+    pcutoff=0
+)
+deeplabcut.plot_trajectories(
+    config_path,
+    videos,
+    shuffle=2
+)
+
+"
+
+
