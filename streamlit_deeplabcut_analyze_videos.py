@@ -55,16 +55,35 @@ for key in ["job_id", "video_path", "generated_files", "base_name"]:
     if key not in st.session_state:
         st.session_state[key] = None
 
-uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
+# --- NEW: Choose between upload or existing file ---
+st.markdown("### Choose input method")
+use_existing = st.toggle("Use existing video on server instead of upload")
 
-# --- Handle upload ---
-if uploaded_file and st.session_state.video_path is None:
-    video_path = os.path.join(VIDEO_DIR, uploaded_file.name)
-    with open(video_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    st.session_state.video_path = video_path
-    st.session_state.base_name = os.path.splitext(uploaded_file.name)[0]
-    st.success(f"Uploaded video saved to: {video_path}")
+if use_existing:
+    # --- NEW: Dropdown menu listing available videos ---
+    available_videos = sorted(
+        [f for f in os.listdir(VIDEO_DIR) if f.lower().endswith((".mp4", ".avi", ".mov"))]
+    )
+
+    if not available_videos:
+        st.warning("No videos found in server directory. Please upload one instead.")
+    else:
+        selected_video = st.selectbox("Select a video already on the server:", available_videos)
+        if st.button("Use selected video"):
+            video_path = os.path.join(VIDEO_DIR, selected_video)
+            st.session_state.video_path = video_path
+            st.session_state.base_name = os.path.splitext(selected_video)[0]
+            st.success(f"Using existing video: {video_path}")
+else:
+    # --- Original upload interface ---
+    uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
+    if uploaded_file and st.session_state.video_path is None:
+        video_path = os.path.join(VIDEO_DIR, uploaded_file.name)
+        with open(video_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        st.session_state.video_path = video_path
+        st.session_state.base_name = os.path.splitext(uploaded_file.name)[0]
+        st.success(f"Uploaded video saved to: {video_path}")
 
 # --- Run analysis ---
 if st.session_state.video_path and st.session_state.job_id is None and st.session_state.generated_files is None:
