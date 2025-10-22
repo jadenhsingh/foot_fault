@@ -123,11 +123,14 @@ if st.session_state.job_id and st.session_state.generated_files is None:
 # --- Display results if available ---
 if st.session_state.generated_files:
     generated_files = st.session_state.generated_files
-    csv_files = [f for f in generated_files if f.endswith(".csv")]
+    # Only use non-filtered CSVs
+    csv_files = [f for f in generated_files if f.endswith(".csv") and "_filtered" not in f]
 
     if csv_files:
+        # Pick the most recent non-filtered CSV
         csv_path = max(csv_files, key=os.path.getmtime)
         st.success(f"Found CSV: {os.path.basename(csv_path)}")
+
         x_coords, y_coords, body_parts = extract_coordinates(csv_path)
         total_distances = calculate_total_distance_traveled(x_coords, y_coords, body_parts)
 
